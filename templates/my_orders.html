@@ -1,0 +1,39 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<h2 class="mb-4">طلباتي</h2>
+{% if orders %}
+    {% for order in orders %}
+    <div class="card mb-3 shadow-sm">
+        <div class="card-header bg-light d-flex justify-content-between flex-wrap">
+            <span><strong>رقم الطلب:</strong> #{{ order.id }}</span>
+            <!-- NEW: Display Order Status -->
+            <span>
+                <strong>الحالة:</strong>
+                {% if order.status == 'تم التوصيل' %}
+                    <span class="badge bg-success">{{ order.status }}</span>
+                {% else %}
+                    <span class="badge bg-warning text-dark">{{ order.status }}</span>
+                {% endif %}
+            </span>
+            <span><strong>التاريخ:</strong> {{ order.order_date.strftime('%Y-%m-%d') }}</span>
+        </div>
+        <div class="card-body">
+            <ul class="list-group list-group-flush">
+                {% for item in order.items %}
+                <li class="list-group-item d-flex justify-content-between">
+                    <span>{{ item.product.name }} (الكمية: {{ item.quantity }} كيلو)</span>
+                    <span>{{ "%.2f"|format(item.price * item.quantity) }} ج.م</span>
+                </li>
+                {% endfor %}
+            </ul>
+        </div>
+        <div class="card-footer text-start">
+            <strong>الإجمالي: <span class="price">{{ "%.2f"|format(order.total_price) }} جنيه مصري</span></strong>
+        </div>
+    </div>
+    {% endfor %}
+{% else %}
+<div class="alert alert-info">لم تقم بأي طلبات بعد.</div>
+{% endif %}
+{% endblock %}

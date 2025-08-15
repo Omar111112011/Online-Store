@@ -1,0 +1,14 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="text-center p-5 bg-light rounded shadow-sm">
+    <h1 class="display-4 text-success"><i class="bi bi-check-circle-fill"></i> شكراً لك!</h1>
+    <p class="lead">تم استلام طلبك رقم <strong>#{{ order.id }}</strong> بنجاح.</p>
+    <hr>
+    <p>سنتواصل معك قريباً على الرقم <strong>{{ order.phone }}</strong> لتأكيد تفاصيل التوصيل إلى <strong>{{ order.address }}</strong>.</p>
+    <div class="mt-4">
+        <a class="btn btn-success" href="{{ url_for('my_orders') }}">عرض طلباتي</a>
+        <a class="btn btn-outline-secondary" href="{{ url_for('home') }}">العودة للرئيسية</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+{% extends "layout.html" %}
+
+{% block content %}
+<div class="card shadow-sm">
+    <div class="card-header">
+        <h2><i class="bi bi-cart-fill"></i> سلة التسوق</h2>
+    </div>
+    <div class="card-body">
+        {% if cart_items %}
+        <div class="table-responsive">
+            <table class="table align-middle">
+                <thead>
+                    <tr>
+                        <th scope="col">المنتج</th>
+                        <th scope="col">السعر / كيلو</th>
+                        <th scope="col">الكمية (كيلو)</th>
+                        <th scope="col">الإجمالي</th>
+                        <th scope="col"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <!-- UPDATED: Using url_for for the image -->
+                                <img src="{{ url_for('static', filename=item.product.image_url) }}" alt="{{ item.product.name }}" style="width: 50px; height: 50px; object-fit: cover;" class="me-3 rounded">
+                                <span>{{ item.product.name }}</span>
+                            </div>
+                        </td>
+                        <td>{{ "%.2f"|format(item.product.price) }} ج.م</td>
+                        <td>
+                            <form action="{{ url_for('update_cart', product_id=item.product.id) }}" method="post" class="d-flex">
+                                <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control" style="width: 70px;">
+                                <button type="submit" class="btn btn-sm btn-outline-secondary ms-2">تحديث</button>
+                            </form>
+                        </td>
+                        <td>{{ "%.2f"|format(item.total) }} ج.م</td>
+                        <td>
+                            <a href="{{ url_for('remove_from_cart', product_id=item.product.id) }}" class="btn btn-sm btn-danger"><i class="bi bi-trash"></i></a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <hr>
+        <div class="text-start">
+            <h4>الإجمالي الكلي: <span class="price">{{ "%.2f"|format(total_price) }} جنيه مصري</span></h4>
+            <a href="{{ url_for('checkout') }}" class="btn btn-success btn-lg mt-3">الانتقال إلى الدفع <i class="bi bi-arrow-left-circle-fill"></i></a>
+        </div>
+        {% else %}
+        <div class="alert alert-info text-center">
+            سلة التسوق فارغة. <a href="{{ url_for('home') }}" class="alert-link">ابدأ التسوق الآن!</a>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
